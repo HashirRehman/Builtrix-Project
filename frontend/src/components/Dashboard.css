@@ -1,14 +1,6 @@
 .dashboard {
-  padding: 20px;
   max-width: 1400px;
   margin: 0 auto;
-}
-
-.dashboard h1 {
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 2rem;
-  font-weight: 600;
 }
 
 .dashboard-loading {
@@ -16,65 +8,124 @@
   justify-content: center;
   align-items: center;
   height: 400px;
-  font-size: 1.2rem;
-  color: #666;
 }
 
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto auto auto;
-  gap: 20px;
-  margin-top: 20px;
+  gap: 24px;
 }
 
 .widget {
   background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid #e1e5e9;
+  transition: box-shadow 0.2s ease;
+}
+
+.widget:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .widget h3 {
-  margin: 0 0 15px 0;
+  margin: 0 0 20px 0;
   color: #333;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.widget h3::before {
+  content: '';
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2px;
 }
 
 .map-widget {
   grid-column: 1 / -1;
-  height: 400px;
+  min-height: 450px;
 }
 
 .chart-widget {
-  height: 350px;
+  min-height: 380px;
   position: relative;
+}
+
+.filter-widget {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  margin-bottom: 8px;
+}
+
+.filter-widget h3::before {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Enhanced loading states */
+.chart-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 300px;
+  color: #666;
+}
+
+.chart-loading h3 {
+  margin-bottom: 24px;
+  color: #333;
 }
 
 /* Responsive design */
 @media (max-width: 1024px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .map-widget {
     grid-column: 1;
-    height: 300px;
+    min-height: 350px;
+  }
+
+  .chart-widget {
+    min-height: 320px;
   }
 }
 
 @media (max-width: 768px) {
-  .dashboard {
-    padding: 15px;
-  }
-
   .widget {
-    padding: 15px;
+    padding: 20px;
   }
 
   .chart-widget {
-    height: 300px;
+    min-height: 280px;
+  }
+
+  .map-widget {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .widget {
+    padding: 16px;
+  }
+
+  .widget h3 {
+    font-size: 1.1rem;
+  }
+
+  .chart-widget {
+    min-height: 250px;
   }
 }

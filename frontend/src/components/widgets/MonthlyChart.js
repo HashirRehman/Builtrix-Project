@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import LoadingSpinner from "../LoadingSpinner";
 import "./MonthlyChart.css";
 
 const API_BASE_URL = "http://localhost:5000/api";
@@ -101,7 +102,7 @@ const MonthlyChart = ({ filters, onMonthClick }) => {
     return (
       <div className="chart-loading">
         <h3>Monthly Energy Consumption</h3>
-        <div>Loading...</div>
+        <LoadingSpinner message="Loading monthly data..." />
       </div>
     );
   }
