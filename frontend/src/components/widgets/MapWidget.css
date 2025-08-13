@@ -1,0 +1,134 @@
+.map-widget-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.map-container {
+  flex: 1;
+  position: relative;
+  display: flex;
+}
+
+.map-background {
+  flex: 1;
+  background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #e1e5e9;
+}
+
+.map-marker {
+  position: absolute;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.marker-inner {
+  width: 100%;
+  height: 100%;
+  background: #007bff;
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.map-marker:hover .marker-inner {
+  background: #0056b3;
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.map-marker.selected .marker-inner {
+  background: #dc3545;
+  border-color: #fff;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.3);
+}
+
+.map-tooltip {
+  position: absolute;
+  transform: translate(-50%, -120%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.tooltip-content {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.tooltip-content strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.tooltip-address {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+.map-legend {
+  width: 150px;
+  padding: 15px;
+  background: white;
+  border: 1px solid #e1e5e9;
+  border-radius: 4px;
+  margin-left: 10px;
+}
+
+.map-legend h4 {
+  margin: 0 0 10px 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.legend-marker {
+  width: 12px;
+  height: 12px;
+  background: #007bff;
+  border: 1px solid white;
+  border-radius: 50%;
+  margin-right: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.legend-marker.large {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 768px) {
+  .map-container {
+    flex-direction: column;
+  }
+
+  .map-legend {
+    width: auto;
+    margin-left: 0;
+    margin-top: 10px;
+  }
+
+  .legend-item {
+    display: inline-flex;
+    margin-right: 15px;
+    margin-bottom: 5px;
+  }
+}
