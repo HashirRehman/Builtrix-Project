@@ -1,4 +1,5 @@
 import express from "express";
+import { optionalAuth } from "../middleware/auth.js";
 import {
   getMetadata,
   getMonthlyConsumption,
@@ -8,6 +9,8 @@ import {
 } from "../controllers/dataController.js";
 
 const router = express.Router();
+
+router.use(optionalAuth);
 
 router.get("/metadata", getMetadata);
 
