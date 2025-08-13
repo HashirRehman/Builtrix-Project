@@ -59,6 +59,8 @@ async function startServer() {
             "Get 15-minute energy consumption (params: year, month, day, building)",
           "GET /api/energy/sources":
             "Get energy source breakdown (params: year, month, day)",
+          "GET /api/export":
+            "Export data for download (params: type=[metadata|monthly|daily|fifteenmin], year, month, day, building)",
         },
       },
       authentication: {

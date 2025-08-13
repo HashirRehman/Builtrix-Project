@@ -41,7 +41,7 @@
 }
 
 .widget h3::before {
-  content: '';
+  content: "";
   width: 4px;
   height: 24px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -67,6 +67,13 @@
 
 .filter-widget h3::before {
   background: rgba(255, 255, 255, 0.3);
+}
+
+.export-widget {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  margin-bottom: 16px;
 }
 
 /* Enhanced loading states */

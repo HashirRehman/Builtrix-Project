@@ -288,3 +288,176 @@ export const getEnergySourceBreakdown = async (req, res) => {
     });
   }
 };
+
+// Export data endpoint for CSV/JSON downloads
+export const exportData = async (req, res) => {
+  try {
+    const { type, building, year, month, day } = req.query;
+    let query, result;
+
+    switch (type) {
+      case "metadata":
+        query = `
+          SELECT
+            cpe,
+            lat,
+            lon,
+            totalarea,
+            name,
+            fulladdress,
+            (SELECT SUM(active_energy) FROM smart_meter WHERE smart_meter.cpe = metadata.cpe) as total_consumption
+          FROM metadata
+          ORDER BY name
+        `;
+        result = await pool.query(query);
+        break;
+
+      case "monthly":
+        query = `
+          SELECT
+            sm.cpe,
+            md.name,
+            EXTRACT(YEAR FROM sm.timestamp) as year,
+            EXTRACT(MONTH FROM sm.timestamp) as month,
+            SUM(sm.active_energy) as total_consumption
+          FROM smart_meter sm
+          JOIN metadata md ON sm.cpe = md.cpe
+        `;
+
+        const monthlyParams = [];
+        const monthlyConditions = [];
+
+        if (year) {
+          monthlyConditions.push(
+            `EXTRACT(YEAR FROM sm.timestamp) = $${monthlyParams.length + 1}`
+          );
+          monthlyParams.push(year);
+        }
+
+        if (building) {
+          monthlyConditions.push(`sm.cpe = $${monthlyParams.length + 1}`);
+          monthlyParams.push(building);
+        }
+
+        if (monthlyConditions.length > 0) {
+          query += ` WHERE ${monthlyConditions.join(" AND ")}`;
+        }
+
+        query += ` GROUP BY sm.cpe, md.name, year, month ORDER BY year, month, md.name`;
+        result = await pool.query(query, monthlyParams);
+        break;
+
+      case "daily":
+        query = `
+          SELECT
+            sm.cpe,
+            md.name,
+            EXTRACT(YEAR FROM sm.timestamp) as year,
+            EXTRACT(MONTH FROM sm.timestamp) as month,
+            EXTRACT(DAY FROM sm.timestamp) as day,
+            SUM(sm.active_energy) as total_consumption
+          FROM smart_meter sm
+          JOIN metadata md ON sm.cpe = md.cpe
+        `;
+
+        const dailyParams = [];
+        const dailyConditions = [];
+
+        if (year) {
+          dailyConditions.push(
+            `EXTRACT(YEAR FROM sm.timestamp) = $${dailyParams.length + 1}`
+          );
+          dailyParams.push(year);
+        }
+
+        if (month) {
+          dailyConditions.push(
+            `EXTRACT(MONTH FROM sm.timestamp) = $${dailyParams.length + 1}`
+          );
+          dailyParams.push(month);
+        }
+
+        if (building) {
+          dailyConditions.push(`sm.cpe = $${dailyParams.length + 1}`);
+          dailyParams.push(building);
+        }
+
+        if (dailyConditions.length > 0) {
+          query += ` WHERE ${dailyConditions.join(" AND ")}`;
+        }
+
+        query += ` GROUP BY sm.cpe, md.name, year, month, day ORDER BY year, month, day, md.name`;
+        result = await pool.query(query, dailyParams);
+        break;
+
+      case "fifteenmin":
+        query = `
+          SELECT
+            sm.cpe,
+            md.name,
+            sm.timestamp,
+            sm.active_energy
+          FROM smart_meter sm
+          JOIN metadata md ON sm.cpe = md.cpe
+        `;
+
+        const fifteenParams = [];
+        const fifteenConditions = [];
+
+        if (year) {
+          fifteenConditions.push(
+            `EXTRACT(YEAR FROM sm.timestamp) = $${fifteenParams.length + 1}`
+          );
+          fifteenParams.push(year);
+        }
+
+        if (month) {
+          fifteenConditions.push(
+            `EXTRACT(MONTH FROM sm.timestamp) = $${fifteenParams.length + 1}`
+          );
+          fifteenParams.push(month);
+        }
+
+        if (day) {
+          fifteenConditions.push(
+            `EXTRACT(DAY FROM sm.timestamp) = $${fifteenParams.length + 1}`
+          );
+          fifteenParams.push(day);
+        }
+
+        if (building) {
+          fifteenConditions.push(`sm.cpe = $${fifteenParams.length + 1}`);
+          fifteenParams.push(building);
+        }
+
+        if (fifteenConditions.length > 0) {
+          query += ` WHERE ${fifteenConditions.join(" AND ")}`;
+        }
+
+        // Limit to prevent very large exports
+        query += ` ORDER BY sm.timestamp, md.name LIMIT 10000`;
+        result = await pool.query(query, fifteenParams);
+        break;
+
+      default:
+        return res.status(400).json({
+          success: false,
+          message:
+            "Invalid export type. Use: metadata, monthly, daily, or fifteenmin",
+        });
+    }
+
+    res.json({
+      success: true,
+      data: result.rows,
+      message: `${type} data exported successfully`,
+      count: result.rows.length,
+    });
+  } catch (error) {
+    console.error("Error exporting data:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};

@@ -5,6 +5,7 @@ import DailyChart from "./widgets/DailyChart";
 import FifteenMinChart from "./widgets/FifteenMinChart";
 import EnergySourceChart from "./widgets/EnergySourceChart";
 import FilterPanel from "./widgets/FilterPanel";
+import DataExport from "./widgets/DataExport";
 import "./Dashboard.css";
 
 const API_BASE_URL = "http://localhost:5000/api";
@@ -66,6 +67,8 @@ const Dashboard = () => {
         buildings={buildings}
         onFilterChange={handleFilterChange}
       />
+
+      <DataExport filters={filters} buildings={buildings} />
 
       <div className="dashboard-grid">
         <div className="widget map-widget">
