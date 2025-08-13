@@ -1,0 +1,296 @@
+/* Animated Button Styles */
+.animated-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  user-select: none;
+  outline: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.animated-button:focus {
+  outline: 2px solid rgba(59, 130, 246, 0.5);
+  outline-offset: 2px;
+}
+
+/* Button Content */
+.button-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.button-text {
+  transition: transform 0.2s ease;
+}
+
+.button-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+/* Size Variants */
+.button-small {
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  min-height: 32px;
+}
+
+.button-medium {
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  min-height: 40px;
+}
+
+.button-large {
+  padding: 14px 28px;
+  font-size: 1rem;
+  min-height: 48px;
+}
+
+/* Color Variants */
+.button-primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+}
+
+.button-primary:hover:not(.button-disabled):not(.button-loading) {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.button-primary:active:not(.button-disabled):not(.button-loading) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.4);
+}
+
+.button-secondary {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  color: white;
+}
+
+.button-secondary:hover:not(.button-disabled):not(.button-loading) {
+  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);
+}
+
+.button-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.button-success:hover:not(.button-disabled):not(.button-loading) {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.button-danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.button-danger:hover:not(.button-disabled):not(.button-loading) {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.button-ghost {
+  background: transparent;
+  color: #374151;
+  border: 2px solid #e5e7eb;
+  box-shadow: none;
+}
+
+.button-ghost:hover:not(.button-disabled):not(.button-loading) {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading State */
+.button-loading {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.button-loading .button-text {
+  opacity: 0.7;
+}
+
+.button-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Disabled State */
+.button-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Ripple Effect */
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0);
+  animation: ripple-animation 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-animation {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* Icon Animations */
+.animated-button:hover:not(.button-disabled):not(.button-loading)
+  .button-icon-right {
+  transform: translateX(2px);
+}
+
+.animated-button:hover:not(.button-disabled):not(.button-loading)
+  .button-icon-left {
+  transform: translateX(-2px);
+}
+
+/* Press Animation */
+.animated-button:active:not(.button-disabled):not(.button-loading) {
+  transform: scale(0.98);
+}
+
+.animated-button:active:not(.button-disabled):not(.button-loading)
+  .button-text {
+  transform: scale(0.95);
+}
+
+/* Focus Animation */
+.animated-button:focus:not(.button-disabled):not(.button-loading) {
+  animation: focusPulse 2s ease-in-out infinite;
+}
+
+@keyframes focusPulse {
+  0%,
+  100% {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(59, 130, 246, 0);
+  }
+  50% {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+}
+
+/* Button Groups */
+.button-group {
+  display: flex;
+  gap: 8px;
+}
+
+.button-group .animated-button {
+  flex: 1;
+}
+
+.button-group .animated-button:not(:last-child) {
+  margin-right: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .button-large {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    min-height: 44px;
+  }
+
+  .button-medium {
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    min-height: 36px;
+  }
+
+  .button-small {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    min-height: 32px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .animated-button,
+  .button-text,
+  .button-icon,
+  .spinner {
+    animation: none;
+    transition: none;
+  }
+
+  .animated-button:hover:not(.button-disabled):not(.button-loading) {
+    transform: none;
+  }
+
+  .animated-button:active:not(.button-disabled):not(.button-loading) {
+    transform: none;
+  }
+
+  .ripple-effect {
+    display: none;
+  }
+}
+
+/* Dark Theme */
+@media (prefers-color-scheme: dark) {
+  .button-ghost {
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+
+  .button-ghost:hover:not(.button-disabled):not(.button-loading) {
+    background: #1f2937;
+    border-color: #6b7280;
+  }
+}

@@ -6,6 +6,8 @@ import FifteenMinChart from "./widgets/FifteenMinChart";
 import EnergySourceChart from "./widgets/EnergySourceChart";
 import FilterPanel from "./widgets/FilterPanel";
 import DataExport from "./widgets/DataExport";
+import LoadingSkeleton, { ChartSkeleton, MapSkeleton } from "./common/LoadingSkeleton";
+import PageTransition from "./common/PageTransition";
 import "./Dashboard.css";
 
 const API_BASE_URL = "http://localhost:5000/api";
@@ -55,47 +57,90 @@ const Dashboard = () => {
   };
 
   if (loading) {
-    return <div className="dashboard-loading">Loading dashboard...</div>;
+    return (
+      <div className="dashboard">
+        <div className="dashboard-header">
+          <div className="skeleton-title" style={{ width: '250px', height: '32px', marginBottom: '24px' }}></div>
+        </div>
+        
+        <div className="skeleton-filters" style={{ marginBottom: '24px' }}>
+          <LoadingSkeleton width="100%" height="120px" />
+        </div>
+        
+        <div className="skeleton-export" style={{ marginBottom: '24px' }}>
+          <LoadingSkeleton width="100%" height="80px" />
+        </div>
+
+        <div className="dashboard-grid">
+          <div className="widget map-widget">
+            <MapSkeleton />
+          </div>
+          
+          <div className="widget chart-widget">
+            <ChartSkeleton />
+          </div>
+          
+          <div className="widget chart-widget">
+            <ChartSkeleton />
+          </div>
+          
+          <div className="widget chart-widget">
+            <ChartSkeleton />
+          </div>
+          
+          <div className="widget chart-widget">
+            <ChartSkeleton />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="dashboard">
-      <h1>Energy Dashboard</h1>
-
-      <FilterPanel
-        filters={filters}
-        buildings={buildings}
-        onFilterChange={handleFilterChange}
-      />
-
-      <DataExport filters={filters} buildings={buildings} />
-
-      <div className="dashboard-grid">
-        <div className="widget map-widget">
-          <MapWidget
-            buildings={buildings}
-            selectedBuilding={filters.building}
-            onBuildingSelect={handleBuildingSelect}
-          />
+    <PageTransition transitionKey="dashboard" type="fadeInUp" duration={400}>
+      <div className="dashboard">
+        <div className="dashboard-header">
+          <h1 className="dashboard-title">Energy Dashboard</h1>
+          <p className="dashboard-subtitle">
+            Real-time energy consumption monitoring and analytics
+          </p>
         </div>
 
-        <div className="widget chart-widget">
-          <MonthlyChart filters={filters} onMonthClick={handleMonthClick} />
-        </div>
+        <FilterPanel
+          filters={filters}
+          buildings={buildings}
+          onFilterChange={handleFilterChange}
+        />
 
-        <div className="widget chart-widget">
-          <DailyChart filters={filters} onDayClick={handleDayClick} />
-        </div>
+        <DataExport filters={filters} buildings={buildings} />
 
-        <div className="widget chart-widget">
-          <FifteenMinChart filters={filters} />
-        </div>
+        <div className="dashboard-grid">
+          <div className="widget map-widget">
+            <MapWidget
+              buildings={buildings}
+              selectedBuilding={filters.building}
+              onBuildingSelect={handleBuildingSelect}
+            />
+          </div>
 
-        <div className="widget chart-widget">
-          <EnergySourceChart filters={filters} />
+          <div className="widget chart-widget">
+            <MonthlyChart filters={filters} onMonthClick={handleMonthClick} />
+          </div>
+
+          <div className="widget chart-widget">
+            <DailyChart filters={filters} onDayClick={handleDayClick} />
+          </div>
+
+          <div className="widget chart-widget">
+            <FifteenMinChart filters={filters} />
+          </div>
+
+          <div className="widget chart-widget">
+            <EnergySourceChart filters={filters} />
+          </div>
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 

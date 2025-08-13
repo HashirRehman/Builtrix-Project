@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { PrimaryButton, GhostButton } from "./common/AnimatedButton";
+import PageTransition from "./common/PageTransition";
 import "./Login.css";
 
 const Login = () => {
@@ -66,110 +68,112 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <div className="login-header">
-          <h1>Builtrix Energy Dashboard</h1>
-          <h2>{isLoginMode ? "Sign In" : "Create Account"}</h2>
-        </div>
+    <PageTransition transitionKey={`login-${isLoginMode}`} type="scale" duration={350}>
+      <div className="login-container">
+        <div className="login-card">
+          <div className="login-header">
+            <h1>Builtrix Energy Dashboard</h1>
+            <h2>{isLoginMode ? "Sign In" : "Create Account"}</h2>
+          </div>
 
-        {error && <div className="error-message">{error}</div>}
+          {error && <div className="error-message">{error}</div>}
 
-        <form onSubmit={handleSubmit} className="login-form">
-          {!isLoginMode && (
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="firstName">First Name</label>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required={!isLoginMode}
-                  disabled={loading}
-                />
+          <form onSubmit={handleSubmit} className="login-form">
+            {!isLoginMode && (
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="firstName">First Name</label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    required={!isLoginMode}
+                    disabled={loading}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="lastName">Last Name</label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    required={!isLoginMode}
+                    disabled={loading}
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="lastName">Last Name</label>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required={!isLoginMode}
-                  disabled={loading}
-                />
-              </div>
+            )}
+
+            <div className="form-group">
+              <label htmlFor="email">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                disabled={loading}
+                placeholder="Enter your email"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                disabled={loading}
+                placeholder="Enter your password"
+                minLength={6}
+              />
+            </div>
+
+            <PrimaryButton
+              type="submit"
+              loading={loading}
+              size="large"
+              className="login-button"
+            >
+              {isLoginMode ? "Sign In" : "Create Account"}
+            </PrimaryButton>
+          </form>
+
+          <div className="login-footer">
+            <p>
+              {isLoginMode
+                ? "Don't have an account? "
+                : "Already have an account? "}
+              <GhostButton
+                onClick={toggleMode}
+                disabled={loading}
+                className="toggle-button"
+              >
+                {isLoginMode ? "Sign Up" : "Sign In"}
+              </GhostButton>
+            </p>
+          </div>
+
+          {isLoginMode && (
+            <div className="demo-credentials">
+              <p>
+                <strong>Demo Credentials:</strong>
+              </p>
+              <p>Email: admin@builtrix.tech</p>
+              <p>Password: admin123</p>
             </div>
           )}
-
-          <div className="form-group">
-            <label htmlFor="email">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              disabled={loading}
-              placeholder="Enter your email"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              disabled={loading}
-              placeholder="Enter your password"
-              minLength={6}
-            />
-          </div>
-
-          <button type="submit" className="login-button" disabled={loading}>
-            {loading
-              ? "Please wait..."
-              : isLoginMode
-              ? "Sign In"
-              : "Create Account"}
-          </button>
-        </form>
-
-        <div className="login-footer">
-          <p>
-            {isLoginMode
-              ? "Don't have an account? "
-              : "Already have an account? "}
-            <button
-              type="button"
-              className="toggle-button"
-              onClick={toggleMode}
-              disabled={loading}
-            >
-              {isLoginMode ? "Sign Up" : "Sign In"}
-            </button>
-          </p>
         </div>
-
-        {isLoginMode && (
-          <div className="demo-credentials">
-            <p>
-              <strong>Demo Credentials:</strong>
-            </p>
-            <p>Email: admin@builtrix.tech</p>
-            <p>Password: admin123</p>
-          </div>
-        )}
       </div>
-    </div>
+    </PageTransition>
   );
 };
 

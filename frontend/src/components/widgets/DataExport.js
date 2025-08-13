@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { SuccessButton } from "../common/AnimatedButton";
+import { useNotification } from "../../context/NotificationContext";
 import "./DataExport.css";
 
 const DataExport = ({ filters, buildings }) => {
   const [isExporting, setIsExporting] = useState(false);
   const [exportFormat, setExportFormat] = useState("csv");
   const [exportType, setExportType] = useState("current");
+  const { showSuccess, showError } = useNotification();
 
   const API_BASE_URL = "http://localhost:5000/api";
 
@@ -44,7 +47,7 @@ const DataExport = ({ filters, buildings }) => {
 
   const downloadCSV = (data, filename) => {
     if (!data || data.length === 0) {
-      alert("No data to export");
+      showError("No data available to export", { title: 'Export Error' });
       return;
     }
 
@@ -196,9 +199,15 @@ const DataExport = ({ filters, buildings }) => {
           throw new Error("Unknown export type");
       }
 
-      alert(`Export completed! ${totalRecords} records exported.`);
+      showSuccess(`Export completed! ${totalRecords} records exported successfully.`, {
+        title: 'Export Complete',
+        duration: 4000
+      });
     } catch (error) {
-      alert(`Export failed: ${error.message}`);
+      showError(`Export failed: ${error.message}`, {
+        title: 'Export Error',
+        duration: 6000
+      });
     } finally {
       setIsExporting(false);
     }
@@ -277,26 +286,16 @@ const DataExport = ({ filters, buildings }) => {
 
       <div className="export-description">{getExportDescription()}</div>
 
-      <button
-        className={`export-button ${isExporting ? "exporting" : ""}`}
+      <SuccessButton
+        loading={isExporting}
+        disabled={exportType === "all_current_building" && !filters.building}
         onClick={handleExport}
-        disabled={
-          isExporting ||
-          (exportType === "all_current_building" && !filters.building)
-        }
+        icon={isExporting ? null : "📥"}
+        size="large"
+        className="export-button"
       >
-        {isExporting ? (
-          <>
-            <span className="export-spinner"></span>
-            Exporting...
-          </>
-        ) : (
-          <>
-            <span className="export-icon">📥</span>
-            Export Data
-          </>
-        )}
-      </button>
+        {isExporting ? "Exporting..." : "Export Data"}
+      </SuccessButton>
     </div>
   );
 };
